@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
 
     private bool shouldMove;
     private Rigidbody2D rb;
+    private CapsuleCollider2D playerCollider;
+    private FollowerManager fm;
 
     void Awake()
     {
@@ -19,6 +21,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        playerCollider = gameObject.GetComponent<CapsuleCollider2D>();
+        fm = FollowerManager.instance;
     }
 
     // Update is called once per frame
@@ -33,5 +37,14 @@ public class Player : MonoBehaviour
     public void SetShouldMove(bool value)
     {
         shouldMove = value;
+    }
+
+    void OnTriggerExit2D(Collider2D otherCol)
+    {
+        if(otherCol.gameObject.tag == "House")
+        {
+            print("Encountered house");
+            fm.SpawnFollowers(new Vector2(otherCol.gameObject.transform.position.x - Random.Range(-3f, 0.1f), gameObject.transform.position.y + Random.Range(-0.5f, 0.2f)));
+        }
     }
 }

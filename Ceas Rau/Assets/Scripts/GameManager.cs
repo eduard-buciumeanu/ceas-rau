@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private NoteSpawner noteSpawner;
     private Player playerRef;
+    private FollowerManager followerManager;
     void Awake() {
         if (instance != null) {
             Destroy(gameObject);
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     {
         noteSpawner = NoteSpawner.instance;
         playerRef = Player.instance;
+        followerManager = FollowerManager.instance;
 
         playerRef.SetShouldMove(true);
     }
@@ -61,6 +63,22 @@ public class GameManager : MonoBehaviour
 
     public void RegisterMiss()
     {
-        print("Missed Note");
+        // print("Missed Note");
+
+        //Choose random follower from the crowd and stack them with a mistake
+        //Number of choices increases with followers
+        if (followerManager.followers.Count >= 1)
+        {
+	        int counter = Mathf.CeilToInt(followerManager.followers.Count/2);
+	
+	        for (int i = 1; i <= counter; i++)
+	        {
+	            int randomFollower  = Random.Range(1,followerManager.followers.Count);
+                followerManager.followers[randomFollower].gameObject.GetComponent<Follower>().Awaken();
+	        }
+        }       
+
+        
+        
     }
 }

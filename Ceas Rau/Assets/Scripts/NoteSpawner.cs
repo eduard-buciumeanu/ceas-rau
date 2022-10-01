@@ -22,11 +22,14 @@ public class NoteSpawner : MonoBehaviour
 
     }
 
-    private SpriteRenderer spriteRenderer;
-    private Note spawnedNote;
     private UIManager uiManager;
     private GameManager gameManager;
-    [SerializeField]float noteTimer;
+    private FollowerManager followerManager;
+
+    private SpriteRenderer spriteRenderer;
+    private Note spawnedNote;
+    
+    [SerializeField]float noteTimer = 2f;
     private float decayTimer;
 
     void Awake() 
@@ -45,6 +48,7 @@ public class NoteSpawner : MonoBehaviour
         //Getting the UIManager ref
         uiManager = UIManager.instance;
         gameManager = GameManager.instance;
+        followerManager = FollowerManager.instance;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -60,7 +64,8 @@ public class NoteSpawner : MonoBehaviour
         
         spriteRenderer.sprite = spawnedNote.currentSprite;
 
-        // spawnedNote = (GameObject)Instantiate(Resources.Load("Note"), gameObject.transform.position, Quaternion.identity);
+        //adjust the timer based on number of followers
+
         decayTimer = noteTimer;
         
     }
@@ -134,16 +139,16 @@ public class NoteSpawner : MonoBehaviour
             Debug.Log("No spawned note!");
             return null;
         }
+    }
 
-        
+    public void UpdateTimer(float timerDifference)
+    {
+        noteTimer += timerDifference;
     }
 
     public void ClearNote()
     {
-        // Destroy(spawnedNote, 0.1f);
-
         spawnedNote.isActive = false;
     }
-
     
 }
