@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private NoteSpawner noteSpawner;
+    private Player playerRef;
     void Awake() {
         if (instance != null) {
             Destroy(gameObject);
@@ -19,6 +20,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         noteSpawner = NoteSpawner.instance;
+        playerRef = Player.instance;
+
+        playerRef.SetShouldMove(true);
     }
 
     
@@ -53,5 +57,10 @@ public class GameManager : MonoBehaviour
             print("Wrong!");
         }
         noteSpawner.ClearNote();
+    }
+
+    public void RegisterMiss()
+    {
+        print("Missed Note");
     }
 }
