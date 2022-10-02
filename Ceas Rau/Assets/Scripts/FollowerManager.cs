@@ -7,7 +7,7 @@ public class FollowerManager : MonoBehaviour
     public static FollowerManager instance;
 
     public List<GameObject> followers;
-    public float difficultyPerFollower = 0.2f;
+    public float difficultyPerFollower = 0.05f;
 
     private Player playerRef;
     private NoteSpawner noteSpawnerRef;
@@ -32,7 +32,7 @@ public class FollowerManager : MonoBehaviour
 
     public void SpawnFollowers(Vector2 spawnPos)
     {
-        int numberOfFollowers = Random.Range(1,4);
+        int numberOfFollowers = Random.Range(1,3);
 
         for (int i = 1; i <= numberOfFollowers; i++)
         {

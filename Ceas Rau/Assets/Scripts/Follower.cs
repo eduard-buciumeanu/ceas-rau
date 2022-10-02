@@ -6,10 +6,11 @@ public class Follower : MonoBehaviour
 {
     public float speed;
     public int mistakeTollerance = 3;
+    public Animator animator;
     
     private Player playerRef;
     private FollowerManager followerManager;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     
     [SerializeField] float minDistanceToFollow;
@@ -43,6 +44,15 @@ public class Follower : MonoBehaviour
         {
             rb.AddForce(Vector2.left * step );
         }
+
+        if(!isAwake)
+        {
+            FacePlayer();
+        }else
+        {
+            spriteRenderer.flipX = true;
+        }
+        
     }
 
     public void Awaken()
@@ -53,6 +63,18 @@ public class Follower : MonoBehaviour
         {
             followerManager.AwakenFollower(gameObject);
             isAwake = true;
+            animator.SetTrigger("hasAwakened");
+        }
+    }
+
+    void FacePlayer()
+    {
+        if(transform.position.x > playerRef.transform.position.x)
+        {
+            spriteRenderer.flipX = true;
+        }else
+        {
+            spriteRenderer.flipX = false;
         }
     }
 }

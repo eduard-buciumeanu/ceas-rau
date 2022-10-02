@@ -7,10 +7,12 @@ public class Player : MonoBehaviour
     public static Player instance;
     public float moveSpeed = 4f;
 
-    private bool shouldMove;
+    public bool shouldMove;
     private Rigidbody2D rb;
     private CapsuleCollider2D playerCollider;
     private FollowerManager fm;
+    private GameManager gm;
+    private NoteSpawner noteSpawner;
 
     void Awake()
     {
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         playerCollider = gameObject.GetComponent<CapsuleCollider2D>();
         fm = FollowerManager.instance;
+        gm = GameManager.instance;
+        noteSpawner = NoteSpawner.instance;
     }
 
     // Update is called once per frame
@@ -39,12 +43,33 @@ public class Player : MonoBehaviour
         shouldMove = value;
     }
 
+    void OnTriggerEnter2D(Collider2D otherCol)
+    {
+        if(otherCol.gameObject.tag == "Finish")
+        {
+            foreach (var follower in fm.followers)
+            {
+                follower.GetComponent<Follower>().rb.velocity = Vector2.zero;
+                follower.GetComponent<Follower>().speed = 0.5f;
+            }
+        }
+    }
     void OnTriggerExit2D(Collider2D otherCol)
     {
         if(otherCol.gameObject.tag == "House")
         {
             print("Encountered house");
-            fm.SpawnFollowers(new Vector2(otherCol.gameObject.transform.position.x - Random.Range(-3f, 0.1f), gameObject.transform.position.y + Random.Range(-0.5f, 0.2f)));
+            fm.SpawnFollowers(new Vector2(otherCol.gameObject.transform.position.x - Random.Range(-1f, 0.1f), gameObject.transform.position.y + Random.Range(-0.5f, 0f)));
+        }
+        if(otherCol.gameObject.tag == "Finish")
+        {
+            print("Ending Screen");
+            shouldMove = false;
+            rb.velocity = Vector2.zero;
+            noteSpawner.gameObject.SetActive(false);
+            
+            gm.gameOver = true;
+            
         }
     }
 }
