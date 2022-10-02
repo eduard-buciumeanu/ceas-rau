@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private FollowerManager followerManager;
 
     public bool gameOver;
+    public AudioSource audioSource;
     void Awake() {
         if (instance != null) {
             Destroy(gameObject);
@@ -79,6 +80,8 @@ public class GameManager : MonoBehaviour
             //Number of choices increases with followers
             if (followerManager.followers.Count >= 1)
             {
+                audioSource.Play();
+                
                 int counter = Mathf.FloorToInt(followerManager.followers.Count/2);
         
                 for (int i = 1; i <= counter; i++)

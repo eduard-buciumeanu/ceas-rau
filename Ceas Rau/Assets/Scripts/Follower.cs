@@ -7,6 +7,7 @@ public class Follower : MonoBehaviour
     public float speed;
     public int mistakeTollerance = 3;
     public Animator animator;
+    public List<GameObject> children;
     
     private Player playerRef;
     private FollowerManager followerManager;
@@ -50,7 +51,7 @@ public class Follower : MonoBehaviour
             FacePlayer();
         }else
         {
-            spriteRenderer.flipX = true;
+            gameObject.transform.localScale = new Vector3(-0.4f,0.4f,0.4f);
         }
         
     }
@@ -59,6 +60,10 @@ public class Follower : MonoBehaviour
     {
         mistakeTollerance--;
         spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.red, 0.4f);
+        
+        children.RemoveAt(children.Count - 1);
+        
+
         if(mistakeTollerance <= 0)
         {
             followerManager.AwakenFollower(gameObject);
@@ -71,10 +76,10 @@ public class Follower : MonoBehaviour
     {
         if(transform.position.x > playerRef.transform.position.x)
         {
-            spriteRenderer.flipX = true;
+            gameObject.transform.localScale = new Vector3(-0.4f,0.4f,0.4f);
         }else
         {
-            spriteRenderer.flipX = false;
+            gameObject.transform.localScale = new Vector3(0.4f,0.4f,0.4f);
         }
     }
 }
